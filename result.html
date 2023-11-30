@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<style>
+  #show {
+    margin-left: 1600px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+  }
+
+  body {
+    background-image: url(image/pexels-karolina-grabowska-4194857.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right center;
+    background-size: 265vh;
+  }
+
+  h1 {
+    color: black !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    body {
+      background-image: url(image/pexels-rodion-kutsaiev-8566875.jpg);
+      background-repeat: no-repeat;
+      background-size: 1000vh;
+    }
+
+    #show {
+      margin-left: 100px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-style: italic;
+      font-weight: bold;
+      font-size: 20px;
+      color: white;
+    }
+
+    h1 {
+      color: white;
+      text-shadow: 10px -1px 10px rgb(240, 236, 236);
+    }
+
+    a {
+      color: yellow;
+    }
+  }
+</style>
+
+<body>
+  <h1 class="ms-5 mt-3 mb-3">Result goes here in card</h1>
+  <a href="index.html" class="ms-5 text-decoration-none fs-2">Back</a>
+  <div id="disp" class="d-flex flex-wrap gap-4 ms-5 "></div>
+  <div id="show"></div>
+
+
+
+  <script>
+    let gettproduction = JSON.parse(localStorage.getItem("budget"));
+    console.log(gettproduction);
+
+    if (gettproduction && gettproduction.length > 0) {
+
+      resever()
+      show.innerHTML += `<p>Total Spent: ${totalSpent.toFixed(2)}</p>`;
+    };
+
+    function resever() {
+      disp.innerHTML = ""
+      gettproduction.map((get, i) => {
+        let totalSpent = 0
+        let getCost = get.Myquant * get.Mypri;
+        totalSpent += getCost;
+        disp.innerHTML +=
+          `<div class="card border-2 shadow" style = "width: 18rem;" >
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-weight: bold; font-size: 30px;">Name: ${get.Mypro}</h5>
+                                <h5>Quantity: ${get.Myquant}</h5>
+                                <h5>price: ${get.Mypri}</h5>
+                                <h5 style="font-style: italic;">total = ${getCost}</h5>
+                                <button onclick="del(${i})" class="bg-danger text-light 
+                                    p-2 border-0 rounded-2">delete</button>
+                                    <button type="button" class="btn 
+                                    btn-primary" data-bs-toggle="modal" 
+                                    data-bs-target="#exampleModal-${i}">Edit</button>
+                                    <!-- Button trigger modal -->
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal-${i}" tabindex="-1" 
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                            aria-label="Close"></button>
+                            </div>
+                              <div class="modal-body">
+            <input type="text" placeholder="Name of the product" id="product-${i}">
+            <input type="number" placeholder="Quantity product" id="quantity-${i}">
+            <input type="number" placeholder="price" id="price-${i}">
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</
+      button>
+      <button type="button" class="btn btn-primary" onclick="editany(${i})" 
+      data-bs-dismiss="modal">Save changes</button>
+      </div>
+      </div>
+      </div>
+      </div>
+              </div >
+              </div>`
+      })
+    }
+
+    
+    function del(i) {
+      gettproduction.splice(i, 1);
+      localStorage.setItem("budget", JSON.stringify(gettproduction));
+      totalSpent = 0;
+      disp.innerHTML = ""
+      resever()
+    }
+
+    function editany(i) {
+      // let newName = product.value;
+      // let quant = quantity.value;
+      // let prices = price.value;
+      gettproduction[i]["Mypro"] = document.getElementById(`product-${i}`).value;
+      gettproduction[i]["Myquant"] = document.getElementById(`quantity-${i}`).value;
+      gettproduction[i]["Mypri"] = document.getElementById(`price-${i}`).value;
+      localStorage.setItem("budget", JSON.stringify(gettproduction))
+      totalSpent = 0;
+      disp.innerHTML = "";
+      resever()
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
